@@ -1,0 +1,7 @@
+{
+  "name": "space",
+  "version": "0.0.1",
+  "scripts": {
+    "sass": "node-sass --output-style expanded -w scss/ -o css/"
+  }
+}

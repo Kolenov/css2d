@@ -1,0 +1,135 @@
+$imgpath: '../img';
+
+$sun: (
+        size:90px,
+        img: 'sun.png',
+);
+$mercuriu: (
+        size:20px,
+        animation-duration: 1s
+);
+$venera: (
+        size:35px,
+        animation-duration: 2s
+);
+$earth: (
+        size:40px,
+        animation-duration: 4s
+);
+$mars: (
+        size:30px,
+        animation-duration: 8s
+);
+$jupiter: (
+        size:70px,
+        animation-duration: 16s
+);
+$saturn: (
+        size:60px,
+        animation-duration: 32s
+);
+$uranus: (
+        size:30px,
+        animation-duration: 64s
+);
+$neptune: (
+        size:30px,
+        animation-duration: 128s
+);
+$pluto: (
+        size:14px,
+        animation-duration: 256s
+);
+
+$planets: (
+        mercuriu: $mercuriu,
+        venera: $venera,
+        earth: $earth,
+        mars: $mars,
+        jupiter: $jupiter,
+        saturn: $saturn,
+        uranus: $uranus,
+        neptune: $neptune,
+        pluto: $pluto
+);
+
+$planets-count: counter($planets);
+$min-orbit: map_get($sun, size) + 30px;
+$step-orbit: 80px;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  background-image: url('#{$imgpath}/space.jpg');
+  background-position: center;
+}
+
+.sun-system {
+  position: relative;
+  height: 100%;
+  background-image: url('#{$imgpath}/#{map_get($sun, img)}');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100px;
+  border-width: 1px;
+}
+
+.orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border-width: 1px;
+  border-style: dotted;
+  border-color: white;
+  transform: translate(-50%, -50%);
+}
+
+.planet {
+  position: absolute;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  img {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+$i: 0;
+@each $planet-name, $planet-attrib in $planets {
+
+  $size: map_get($planet-attrib, size);
+
+  .planet_#{$planet-name} {
+    width: $size;
+    height: $size;
+    top: calc(50% - #{$size/2});
+    left: calc(50% - #{$size/2});
+    animation-name: #{$planet-name};
+    animation-duration: map_get($planet-attrib, animation-duration);
+  }
+
+  $orbit-size: $min-orbit + $step-orbit * $i;
+  .orbit_#{$planet-name} {
+    width: $orbit-size;
+    height: $orbit-size;
+  }
+
+  @keyframes #{$planet-name} {
+    0% {
+      transform: rotate(0deg) translateX($orbit-size/2) rotate(360deg);
+    }
+    100% {
+      transform: rotate(360deg) translateX($orbit-size / 2) rotate(0deg);
+    }
+  }
+
+  $i: $i + 1;
+}
